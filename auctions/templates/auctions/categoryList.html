@@ -3,34 +3,39 @@
 {% block body %}
 
 <h1>Categories</h1>
-
-
-
-{%if categories%}
-
-{%for category in categories%}
-
-<div class="row">
-  <div class="col-md-4">
-
-    <div class="card" class="text-center">
-
-      <div class="card-body">
-
-        <h5>{{ category.name }}</h5>
-        
-       
-      </div>
-    </div>
-
-  </div>
+<div class="text-muted">
+<a  class="btn btn-primary" href="{% url 'add-category'%}">Add Category</a>
 </div>
 
 
-{%endfor%}
+<div class="card-body">
+  <div class="table-responsive">
+    <table class="table align-middle">
 
-{%else%} <h3>List is empty</h3>
 
-{%endif%}
+      <thead>
+        <tr>
 
-{%endblock%}
+          <th>Category number</th>
+          <th>Category Name</th>
+
+        </tr>
+      </thead>
+      
+      <tbody>
+{%for item in category_list %}
+<tr>
+<td>{{item.id}}</td>
+<td><a href="{% url 'show-category' item.id  %}">{{item.catogery}}</a></td>
+
+</tr>
+{% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
+
+ 
