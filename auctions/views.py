@@ -78,6 +78,27 @@ def add_category(request):
     return render (request,'auctions/addCategory.html',{'creatCategForm':creatCategForm})
 
 
+
+def create_listing(request):
+    m=""
+    createForm=ListingForm(initial={
+        'user' : request.user
+    })
+    if request.method=='POST':
+        createForm=ListingForm(request.POST)
+        if createForm.is_valid():
+            createForm.instance.user = request.user
+            createForm.instance.active = True
+            print(request.user)
+            createForm.save()
+            return redirect('index')
+        else:
+            m="error in validity"
+
+    return render(request,'auctions/createListing.html',{'creatForm':createForm,'m':m})
+
+
+
 @login_required
 def category_list(request):
     category_list = Category.objects.all()
