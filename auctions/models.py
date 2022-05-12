@@ -21,7 +21,7 @@ class Listing(models.Model):
     title=models.CharField(max_length=200)
     description=models.CharField(max_length=225)
     imgurl = models.URLField(max_length=200)
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
     price = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)

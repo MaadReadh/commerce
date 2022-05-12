@@ -11,7 +11,9 @@ from .forms import ListingForm, CategoryForm, BidForm, CommentForm
 from .models import User, Listing, Category, Comment, WatchList, Bid
 
 def index(request):
-    return render(request, "auctions/index.html")
+ active_list = Listing.objects.all().filter(active=True)
+ return render(request, 'auctions/index.html', {'active_list': active_list})
+
 
 
 def login_view(request):
@@ -80,22 +82,20 @@ def add_category(request):
 
 
 def create_listing(request):
-    m=""
-    createForm=ListingForm(initial={
-        'user' : request.user
-    })
-    if request.method=='POST':
-        createForm=ListingForm(request.POST)
+    m = ""
+    createForm = ListingForm()
+    if request.method == 'POST':
+        createForm = ListingForm(request.POST)
         if createForm.is_valid():
-            createForm.instance.user = request.user
-            createForm.instance.active = True
-            print(request.user)
-            createForm.save()
+            obj = createForm.save(commit=False)
+            obj.user = request.user
+            obj.save()
+        
             return redirect('index')
         else:
-            m="error in validity"
+            m = "error in validity"
 
-    return render(request,'auctions/createListing.html',{'creatForm':createForm,'m':m})
+    return render(request, 'auctions/creatListing.html', {'creatForm': createForm, 'm': m})
 
 
 
