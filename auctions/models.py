@@ -10,7 +10,7 @@ class Category(models.Model):
     category=models.CharField(max_length=225)
 
     def __str__(self):
-        return f'{self.categoery}'
+        return f'{self.category}'
 
     class Meta:
         verbose_name = 'Categoery'

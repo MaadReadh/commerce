@@ -11,12 +11,13 @@
            {% csrf_token %}
            <div class="input-group">
                <table>
-                   {{ createForm.as_table }}
+                   {{ creatForm.as_table }}
                </table>
-               <button class="px-3 py-2 btn-primary" type="submit">create</button>
-
+              
             </div>
         </form>
+        <button class="btn btn-primary" type="submit">create</button>
+
     </div>
 </div>
 {% endblock%}  
