@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-
+from django.db.models import  Max 
 from .forms import ListingForm, CategoryForm, BidForm, CommentForm
 from .models import User, Listing, Category, Comment, WatchList, Bid
 
@@ -108,3 +108,35 @@ def category_list(request):
 def show_category(request, id):
     active_list = Listing.objects.all().filter(category_id=id, active=True)
     return render(request, 'auctions/index.html' , {'active_list':active_list})
+
+
+
+def show_listing(request,id):
+    message=''
+    txt_color='text-primary'
+    active_list = Listing.objects.all().filter(id=id)
+    bidForm=BidForm()
+    commentForm=CommentForm()
+    comment_list=Comment.objects.all().filter(listing_id=id)
+    max_bid=Bid.objects.all().aggregate(Max('bid'))
+    if request.method == 'POST':
+        creatBid = BidForm(request.POST)
+        if creatBid.is_valid():
+         Obj = creatBid.save(commit=False) 
+         Obj.user = request.user
+         user_bid = creatBid.cleaned_data['bid']
+         start = Listing.objects.all().get(id=id).start_bid
+         if user_bid > start :
+            newList = Listing.objects.all().get(id=id)
+            newList.start_bid = user_bid
+            newList.save()
+            Obj.save()
+            message='the current bid is your bid '
+            txt_color='text-primary'
+         else:
+                message = 'previous bids is greatar than your bid'
+                txt_color='text-danger'
+        else:
+            pass
+    if request.user.is_anonymous:
+        message = 'you can not place bide to this item, Log in first!'
